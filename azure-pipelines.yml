@@ -9,6 +9,7 @@ pool:
 variables:
   resourceGroupName: rg-manual-web0001
   location: brazilsouth
+  siteName: lmliacpaas001-pucg2
   templateFile: arm-templates/webapp-template.json
   parametersFile: arm-templates/webapp-parameters.json
 
@@ -28,6 +29,9 @@ stages:
               templateLocation: 'Linked artifact'
               csmFile: '$(templateFile)'
               csmParametersFile: '$(parametersFile)'
+              overrideParameters: >
+                -siteName $(siteName)
+                -location $(location)
               deploymentMode: 'Incremental'
 
   - stage: DeployApp
@@ -39,5 +43,5 @@ stages:
             inputs:
               azureSubscription: 'ar01com'
               appType: 'webApp'
-              appName: 'lmliacpaas001'
+              appName: '$(siteName)'
               package: 'src'
