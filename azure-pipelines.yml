@@ -1,44 +1,43 @@
 trigger:
-- main
+  - main
 
 pool:
-  name: 'agentPoolPucMinas' # Nome do agent pool
+  name: 'agentPoolPucMinas'
   demands:
-    - Agent.Name -equals mac-agent-pucminas-01 # Força o uso do agente específico
-  vmImage: 'windows-latest'
+    - Agent.Name -equals mac-agent-pucminas-01
 
 variables:
   resourceGroupName: rg-manual-web0001
-  location: centralus
+  location: brazilsouth
   templateFile: arm-templates/webapp-template.json
   parametersFile: arm-templates/webapp-parameters.json
 
 stages:
-- stage: DeployInfrastructure
-  jobs:
-  - job: ARM_Deployment
-    steps:
-    - task: AzureResourceManagerTemplateDeployment@3
-      inputs:
-        deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'ar01com'
-        subscriptionId: '05c40d7a-313f-4ffa-8640-8b46ed864d71'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: '$(resourceGroupName)'
-        location: '$(location)'
-        templateLocation: 'Linked artifact'
-        csmFile: '$(templateFile)'
-        csmParametersFile: '$(parametersFile)'
-        deploymentMode: 'Incremental'
+  - stage: DeployInfrastructure
+    jobs:
+      - job: ARM_Deployment
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              azureResourceManagerConnection: 'ar01com'
+              subscriptionId: '05c40d7a-313f-4ffa-8640-8b46ed864d71'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: '$(resourceGroupName)'
+              location: '$(location)'
+              templateLocation: 'Linked artifact'
+              csmFile: '$(templateFile)'
+              csmParametersFile: '$(parametersFile)'
+              deploymentMode: 'Incremental'
 
-- stage: DeployApp
-  dependsOn: DeployInfrastructure
-  jobs:
-  - job: Publish_HTML
-    steps:
-    - task: AzureWebApp@1
-      inputs:
-        azureSubscription: 'ar01com'
-        appType: 'webApp'
-        appName: 'lmliacpaas001'
-        package: 'src'
+  - stage: DeployApp
+    dependsOn: DeployInfrastructure
+    jobs:
+      - job: Publish_HTML
+        steps:
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'ar01com'
+              appType: 'webApp'
+              appName: 'lmliacpaas001'
+              package: 'src'
