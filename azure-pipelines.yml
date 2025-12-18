@@ -1,5 +1,5 @@
 # ======================================================
-# Alunos: Angelo Louzada | Bruno | Madson - Grupo 02
+# Alunos: Angelo Louzada | Bruno | Madson - Grupo 2
 # ======================================================
 trigger:
   - main
@@ -10,7 +10,7 @@ pool:
     - Agent.Name -equals mac-agent-pucminas-01
 
 variables:
-  resourceGroupName: rg-manual-web0001
+  resourceGroupName: rg-iac-webapp-paas
   location: brazilsouth
   siteName: lmliacpaas001-pucg2
   templateFile: arm-templates/webapp-template.json
