@@ -13,6 +13,7 @@ variables:
   resourceGroupName: rg-iac-webapp-paas
   location: brazilsouth
   siteName: lmliacpaas001-pucg2
+  vmName: 'vm-iac-web-iis-paas'
   templateFile: arm-templates/webapp-template.json
   parametersFile: arm-templates/webapp-parameters.json
 
